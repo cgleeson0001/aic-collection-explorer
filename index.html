@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIC Collection Explorer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <nav>
+      <h1>AIC Collection Explorer</h1>
+    </nav>
+
+    <main>
+      <!-- Search view -->
+      <section id="search-view">
+        <input type="text" id="search-input" placeholder="Search artworks..." />
+        <button id="search-btn">Search</button>
+        <div id="results-grid"></div>
+      </section>
+
+      <!-- Detail view (hidden for now) -->
+      <section id="detail-view" style="display: none;">
+        <button id="back-btn">Back to results</button>
+        <div id="artwork-detail"></div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
