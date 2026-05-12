@@ -10,6 +10,9 @@ const loadingMessage = document.getElementById('loading');
 const searchView = document.getElementById('search-view');
 const detailView = document.getElementById('detail-view');
 const backBtn = document.getElementById('back-btn');
+const navTitle = document.getElementById('nav-title');
+// Store last search term and results so going back doesn't re-fetch
+let lastSearchTerm = '';
 
 // ==============================
 // SEARCH BUTTON CLICK EVENT
@@ -48,10 +51,13 @@ searchInput.addEventListener('keypress', function(e) {
 
 async function fetchArtworks(searchTerm) {
 
-  // Show loading, clear old results and errors
-  showLoading(true);
-  clearError();
-  resultsGrid.innerHTML = '';
+// Show loading, clear old results and errors
+showLoading(true);
+clearError();
+resultsGrid.innerHTML = '';
+
+// Save the current search term so we can show it when user goes back
+lastSearchTerm = searchTerm;
 
   // Build the API URL
     const url = `https://api.artic.edu/api/v1/artworks/search?q=${searchTerm}&fields=id,title,artist_display,image_id,_score&query[term][is_public_domain]=true&limit=20`;
@@ -161,6 +167,11 @@ function showSearchView() {
   // Hide detail view, show search view
   detailView.style.display = 'none';
   searchView.style.display = 'block';
+
+  // Restore the search term in the input box
+  if (lastSearchTerm) {
+    searchInput.value = lastSearchTerm;
+  }
 }
 
 // ==============================
@@ -231,5 +242,10 @@ function displayArtworkDetail(artwork) {
 // ==============================
 
 backBtn.addEventListener('click', function() {
+  showSearchView();
+});
+
+// NAV TITLE CLICK — always goes back to search view
+navTitle.addEventListener('click', function() {
   showSearchView();
 });

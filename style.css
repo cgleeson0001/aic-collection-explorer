@@ -27,6 +27,11 @@ nav h1 {
   font-size: 1.4rem;
   font-weight: 500;
   cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+nav h1:hover {
+  opacity: 0.8;
 }
 
 /* ===========================
