@@ -18,11 +18,18 @@ const backBtn = document.getElementById('back-btn');
 searchBtn.addEventListener('click', function() {
   const searchTerm = searchInput.value.trim();
 
-  // ERROR CASE 1: user clicked search without typing anything
-  if (searchTerm === '') {
-    showError('Please enter a search term.');
-    return;
-  }
+ // ERROR CASE 1: user clicked search without typing anything
+if (searchTerm === '') {
+  showError('Please enter a search term.');
+  return;
+}
+
+// ERROR CASE 2: user typed only special characters or symbols
+const lettersOnly = searchTerm.replace(/[^a-zA-Z0-9 ]/g, '').trim();
+if (lettersOnly.length < 3) {
+  showError('Please enter a valid search term with at least 3 letters.');
+  return;
+}
 
   // If we get here, the search term exists — go fetch artworks
   fetchArtworks(searchTerm);
