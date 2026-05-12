@@ -202,3 +202,18 @@ main {
   font-weight: 500;
   color: #333;
 }
+
+/* No image placeholder */
+.no-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0e0e0;
+}
+
+.no-image p {
+  font-size: 0.85rem;
+  color: #888;
+  text-align: center;
+  padding: 1rem;
+}
