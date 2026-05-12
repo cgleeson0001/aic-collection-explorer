@@ -115,10 +115,10 @@ function displayResults(artworks) {
       </div>
     `;
 
-    // Add click event to each card (we will use this on Day 5)
+    // Click card to view full detail
     card.addEventListener('click', function() {
       const artworkId = card.dataset.id;
-      console.log('Clicked artwork ID:', artworkId);
+      showDetailView(artworkId);
     });
 
     // Add the card to the grid
@@ -143,3 +143,93 @@ function clearError() {
   errorMessage.textContent = '';
   errorMessage.style.display = 'none';
 }
+
+// ==============================
+// SHOW AND HIDE VIEWS
+// ==============================
+
+function showDetailView(artworkId) {
+  // Hide search view, show detail view
+  searchView.style.display = 'none';
+  detailView.style.display = 'block';
+
+  // Fetch the full artwork details
+  fetchArtworkDetail(artworkId);
+}
+
+function showSearchView() {
+  // Hide detail view, show search view
+  detailView.style.display = 'none';
+  searchView.style.display = 'block';
+}
+
+// ==============================
+// FETCH SINGLE ARTWORK DETAIL
+// ==============================
+
+async function fetchArtworkDetail(artworkId) {
+  const detailLoading = document.getElementById('detail-loading');
+  const detailError = document.getElementById('detail-error');
+  const artworkDetail = document.getElementById('artwork-detail');
+
+  // Show loading, clear old content
+  detailLoading.style.display = 'block';
+  detailError.style.display = 'none';
+  artworkDetail.innerHTML = '';
+
+  // Build the API URL for a single artwork
+  const url = `https://api.artic.edu/api/v1/artworks/${artworkId}?fields=id,title,artist_display,date_display,medium_display,dimensions,image_id`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Hide loading
+    detailLoading.style.display = 'none';
+
+    // Display the artwork
+    displayArtworkDetail(data.data);
+
+  } catch (error) {
+    detailLoading.style.display = 'none';
+    detailError.textContent = 'Something went wrong loading this artwork. Please go back and try again.';
+    detailError.style.display = 'block';
+  }
+}
+
+// ==============================
+// BUILD THE DETAIL PAGE
+// ==============================
+
+function displayArtworkDetail(artwork) {
+  const artworkDetail = document.getElementById('artwork-detail');
+
+  // Build image or placeholder
+  let imageHTML = '';
+  if (artwork.image_id) {
+    const imageUrl = `https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`;
+    imageHTML = `<img src="${imageUrl}" alt="${artwork.title}" />`;
+  } else {
+    imageHTML = `<div class="detail-no-image"><p>No image available for this artwork</p></div>`;
+  }
+
+  // Build the full detail HTML
+  artworkDetail.innerHTML = `
+    ${imageHTML}
+    <div class="detail-info">
+      <h2>${artwork.title || 'Untitled'}</h2>
+      <p><span class="detail-label">Artist: </span>${artwork.artist_display || 'Unknown artist'}</p>
+      <p><span class="detail-label">Date: </span>${artwork.date_display || 'Unknown date'}</p>
+      <p><span class="detail-label">Medium: </span>${artwork.medium_display || 'Unknown medium'}</p>
+      <p><span class="detail-label">Dimensions: </span>${artwork.dimensions || 'Unknown dimensions'}</p>
+    </div>
+  `;
+}
+
+// ==============================
+// BACK BUTTON
+// ==============================
+
+backBtn.addEventListener('click', function() {
+  showSearchView();
+});

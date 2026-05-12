@@ -217,3 +217,29 @@ main {
   text-align: center;
   padding: 1rem;
 }
+
+/* Detail no image placeholder */
+.detail-no-image {
+  width: 100%;
+  max-width: 480px;
+  height: 300px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-no-image p {
+  font-size: 0.95rem;
+  color: #888;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* Detail error message */
+#detail-error {
+  color: #c0392b;
+  font-size: 0.95rem;
+  margin: 1rem 0;
+}
