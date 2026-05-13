@@ -9,15 +9,21 @@
   <body>
 
     <nav>
-      <h1 id="nav-title">AIC Collection Explorer</h1>
-    </nav>
+  <h1 id="nav-title">AIC Collection Explorer</h1>
+  <span class="nav-subtitle">Art Institute of Chicago</span>
+</nav>
 
     <main>
 
       <!-- SEARCH VIEW: this is what users see first -->
+      
       <section id="search-view">
+  <div class="search-header">
+    <h2>Explore the Collection</h2>
+    <p>Search over 100,000 artworks from the Art Institute of Chicago</p>
+  </div>
+  <div id="search-bar">
 
-        <div id="search-bar">
           <input type="text" id="search-input" placeholder="Search artworks, artists..." />
           <button id="search-btn">Search</button>
         </div>
@@ -30,7 +36,9 @@
         <div id="results-grid">
 
 
-      </section><p id="loading" style="display: none;">Loading...</p>
+      </section>
+        <p id="loading" style="display: none;">Loading...</p>
+        <p id="results-count"></p>
         <div id="results-grid"></div>
       </section>
 

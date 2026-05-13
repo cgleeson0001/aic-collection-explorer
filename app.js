@@ -97,6 +97,10 @@ lastSearchTerm = searchTerm;
 function displayResults(artworks) {
   resultsGrid.innerHTML = '';
 
+  // Show how many results were found
+  const resultsCount = document.getElementById('results-count');
+  resultsCount.textContent = `${artworks.length} artworks found`;
+
   artworks.forEach(function(artwork) {
 
     // Build the image URL using image_id
