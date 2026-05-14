@@ -13,6 +13,7 @@ const backBtn = document.getElementById('back-btn');
 const navTitle = document.getElementById('nav-title');
 // Store last search term and results so going back doesn't re-fetch
 let lastSearchTerm = '';
+const FETCH_TIMEOUT = 8000; // 8 seconds
 
 // ==============================
 // SEARCH BUTTON CLICK EVENT
@@ -45,6 +46,11 @@ searchInput.addEventListener('keypress', function(e) {
   }
 });
 
+// Clear error message as soon as user starts typing again
+searchInput.addEventListener('input', function() {
+  clearError();
+});
+
 // ==============================
 // FETCH ARTWORKS FROM THE API
 // ==============================
@@ -64,7 +70,12 @@ lastSearchTerm = searchTerm;
 
   try {
     // Send the request to the API
-    const response = await fetch(url);
+    const response = await Promise.race([
+  fetch(url),
+  new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('Request timed out')), FETCH_TIMEOUT)
+  )
+]);
     const data = await response.json();
 
     // Hide loading now that we have data
@@ -73,10 +84,16 @@ lastSearchTerm = searchTerm;
     // Filter out low confidence results
     const goodResults = data.data.filter(artwork => artwork._score > 10);
 
-    if (goodResults.length === 0) {
-      showError(`No results found for "${searchTerm}". Try a different search term.`);
-      return;
-    }
+if (goodResults.length === 0) {
+  resultsGrid.innerHTML = `
+    <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem;">
+      <p style="font-size: 1.1rem; color: #999; margin-bottom: 0.5rem;">No results found for "${searchTerm}"</p>
+      <p style="font-size: 0.9rem; color: #bbb;">Try a different search term like "monet", "portrait", or "landscape"</p>
+    </div>
+  `;
+  showLoading(false);
+  return;
+}
 
     // We have results — build the cards
     displayResults(goodResults);
