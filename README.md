@@ -1,18 +1,17 @@
 # AIC Collection Explorer
 
-A web application that lets you search and explore artwork from the Art Institute of Chicago's public collection. Browse thousands of paintings, sculptures, and other works of art with detailed information about each piece.
+This web app lets one search differnt art pieces from the Art Institute of Chicago's public collection.
 
 ## Live Demo
 
-> Clone the repo and open index.html in your browser to run locally — see How to Run below.
+Clone repo and open index.html in your browser
 
 ## Features
 
-- Search over 100,000 artworks by keyword, artist, or style
-- Browse results in a responsive image grid
-- Click any artwork to view full details including image, artist, date, medium, and dimensions
-- Navigate back to search results without losing your previous search
-- Handles errors including empty searches, no results, and network issues
+- Search over 100,000 art pieces
+- Browse results
+- Click artwork to see details
+- Handles errors
 
 ## API Used
 
@@ -26,11 +25,10 @@ A web application that lets you search and explore artwork from the Art Institut
 
 **1. Search Artworks**
 GET https://api.artic.edu/api/v1/artworks/search?q={searchTerm}&fields=id,title,artist_display,image_id,_score&query[term][is_public_domain]=true&limit=20
-Used to search artworks by keyword and display results in a card grid.
 
 **2. Artwork Detail**
 GET https://api.artic.edu/api/v1/artworks/{id}?fields=id,title,artist_display,date_display,medium_display,dimensions,image_id
-Used to fetch full details for a single artwork when a card is clicked.
+
 
 ## How to Run
 
@@ -40,17 +38,16 @@ git clone https://github.com/cgleeson0001/aic-collection-explorer.git
 2. Navigate into the project folder:
 cd aic-collection-explorer
 
-3. Open index.html in your browser by double clicking it, or use a local server:
+3. Open index.html in browser by double clicking or use a local server:
 npx live-server
 
-No installs or dependencies required — this project uses plain HTML, CSS, and JavaScript.
 
 ## Project Structure
 aic-collection-explorer/
-├── index.html       # Main HTML structure and layout
-├── style.css        # All styles and responsive design
-├── app.js           # JavaScript — API fetch, DOM manipulation, navigation
-└── README.md        # Project documentation
+index.html       # structure and layout
+style.css        # All styles
+app.js           # JavaScript — API fetch
+README.md        # Project documentation
 
 ## Error Handling
 
@@ -63,7 +60,7 @@ aic-collection-explorer/
 
 ## Technologies Used
 
-- HTML5
-- CSS3 (CSS Grid, Flexbox, responsive design)
-- Vanilla JavaScript (Fetch API, async/await, DOM manipulation)
+- HTML
+- CSS
+- JavaScript
 - Art Institute of Chicago public API

@@ -1,7 +1,4 @@
-// ==============================
-// GRAB ELEMENTS FROM THE PAGE
-// ==============================
-
+//grab elements
 const searchInput = document.getElementById('search-input');
 const searchBtn = document.getElementById('search-btn');
 const resultsGrid = document.getElementById('results-grid');
@@ -11,65 +8,60 @@ const searchView = document.getElementById('search-view');
 const detailView = document.getElementById('detail-view');
 const backBtn = document.getElementById('back-btn');
 const navTitle = document.getElementById('nav-title');
-// Store last search term and results so going back doesn't re-fetch
+
 let lastSearchTerm = '';
-const FETCH_TIMEOUT = 8000; // 8 seconds
+const FETCH_TIMEOUT = 8000;
 
-// ==============================
-// SEARCH BUTTON CLICK EVENT
-// ==============================
 
+//search button
 searchBtn.addEventListener('click', function() {
   const searchTerm = searchInput.value.trim();
 
- // ERROR CASE 1: user clicked search without typing anything
+ //if blank search term
 if (searchTerm === '') {
   showError('Please enter a search term.');
   return;
 }
 
-// ERROR CASE 2: user typed only special characters or symbols
+//special characters or symbols
 const lettersOnly = searchTerm.replace(/[^a-zA-Z0-9 ]/g, '').trim();
 if (lettersOnly.length < 3) {
   showError('Please enter a valid search term with at least 3 letters.');
   return;
 }
 
-  // If we get here, the search term exists — go fetch artworks
+  //fetch artworks
   fetchArtworks(searchTerm);
 });
 
-// Also search when user presses Enter key in the input
+//search when user presses enter key
 searchInput.addEventListener('keypress', function(e) {
   if (e.key === 'Enter') {
     searchBtn.click();
   }
 });
 
-// Clear error message as soon as user starts typing again
+// clear error message when user starts typing
 searchInput.addEventListener('input', function() {
   clearError();
 });
 
-// ==============================
-// FETCH ARTWORKS FROM THE API
-// ==============================
-
+//fetch artwork from api
 async function fetchArtworks(searchTerm) {
 
-// Show loading, clear old results and errors
+//show loading and clear old results
 showLoading(true);
 clearError();
 resultsGrid.innerHTML = '';
 
-// Save the current search term so we can show it when user goes back
+//save the current search
 lastSearchTerm = searchTerm;
 
-  // Build the API URL
+  //build api url
     const url = `https://api.artic.edu/api/v1/artworks/search?q=${searchTerm}&fields=id,title,artist_display,image_id,_score&query[term][is_public_domain]=true&limit=20`;
 
   try {
-    // Send the request to the API
+    // send the request to api
     const response = await Promise.race([
   fetch(url),
   new Promise((_, reject) =>
@@ -78,10 +70,10 @@ lastSearchTerm = searchTerm;
 ]);
     const data = await response.json();
 
-    // Hide loading now that we have data
+    //hide loading now
     showLoading(false);
 
-    // Filter out low confidence results
+    //filter out low confidence results
     const goodResults = data.data.filter(artwork => artwork._score > 10);
 
 if (goodResults.length === 0) {
@@ -89,41 +81,38 @@ if (goodResults.length === 0) {
   resultsCount.textContent = '';
   resultsGrid.innerHTML = `
     <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem;">
-      <p style="font-size: 1.1rem; color: #999; margin-bottom: 0.5rem;">No results found for "${searchTerm}"</p>
-      <p style="font-size: 0.9rem; color: #bbb;">Try a different search term like "monet", "portrait", or "landscape"</p>
+      <p style="font-size: 1.5rem; color: #899; margin-bottom: 0.5rem;">No results found for "${searchTerm}"</p>
+      <p style="font-size: 1rem; color: #ccc;">Try a different search term like "van gogh", "canvas", or "woodblock"</p>
     </div>
   `;
   showLoading(false);
   return;
 }
 
-    // We have results — build the cards
+    //build cards
     displayResults(goodResults);
 
 
 
   } catch (error) {
-    // ERROR CASE 3: network error or API is down
+    //if network error or api down
     showLoading(false);
     showError('Something went wrong. Please check your internet connection and try again.');
   }
 }
 
-// ==============================
-// BUILD AND DISPLAY CARDS
-// ==============================
-
+//build cards
 function displayResults(artworks) {
   resultsGrid.innerHTML = '';
 
-  // Show how many results were found
+  //results count
   const resultsCount = document.getElementById('results-count');
   resultsCount.textContent = `${artworks.length} artworks found`;
 
   artworks.forEach(function(artwork) {
 
-    // Build the image URL using image_id
-    // Some artworks have no image — use a placeholder in that case
+   
+    // use placeholder if artwork has no image
     let imageHTML = '';
     if (artwork.image_id) {
       const imageUrl = `https://www.artic.edu/iiif/2/${artwork.image_id}/full/400,/0/default.jpg`;
@@ -132,7 +121,7 @@ function displayResults(artworks) {
       imageHTML = `<div class="card-image no-image"><p>No image available</p></div>`;
     }
 
-    // Build the full card HTML
+    // build full card
     const card = document.createElement('div');
     card.className = 'artwork-card';
     card.dataset.id = artwork.id;
@@ -144,21 +133,18 @@ function displayResults(artworks) {
       </div>
     `;
 
-    // Click card to view full detail
+    // click card to view full detail
     card.addEventListener('click', function() {
       const artworkId = card.dataset.id;
       showDetailView(artworkId);
     });
 
-    // Add the card to the grid
+    // add card to grid
     resultsGrid.appendChild(card);
   });
 }
 
-// ==============================
-// HELPER FUNCTIONS
-// ==============================
-
+//helper functions
 function showLoading(isLoading) {
   loadingMessage.style.display = isLoading ? 'block' : 'none';
 }
@@ -173,55 +159,49 @@ function clearError() {
   errorMessage.style.display = 'none';
 }
 
-// ==============================
-// SHOW AND HIDE VIEWS
-// ==============================
-
+//views
 function showDetailView(artworkId) {
-  // Hide search view, show detail view
+  // hide search view- show detail view
   searchView.style.display = 'none';
   detailView.style.display = 'block';
 
-  // Fetch the full artwork details
+  // fetch full artwork details
   fetchArtworkDetail(artworkId);
 }
 
 function showSearchView() {
-  // Hide detail view, show search view
+  // hide detail view- show search view
   detailView.style.display = 'none';
   searchView.style.display = 'block';
 
-  // Restore the search term in the input box
+  // restore previous search term
   if (lastSearchTerm) {
     searchInput.value = lastSearchTerm;
   }
 }
 
-// ==============================
-// FETCH SINGLE ARTWORK DETAIL
-// ==============================
-
+//fetch artwork details
 async function fetchArtworkDetail(artworkId) {
   const detailLoading = document.getElementById('detail-loading');
   const detailError = document.getElementById('detail-error');
   const artworkDetail = document.getElementById('artwork-detail');
 
-  // Show loading, clear old content
+  // show loading- clear old content
   detailLoading.style.display = 'block';
   detailError.style.display = 'none';
   artworkDetail.innerHTML = '';
 
-  // Build the API URL for a single artwork
+  //build api url for one artwork
   const url = `https://api.artic.edu/api/v1/artworks/${artworkId}?fields=id,title,artist_display,date_display,medium_display,dimensions,image_id`;
 
   try {
     const response = await fetch(url);
     const data = await response.json();
 
-    // Hide loading
+    // hide loading
     detailLoading.style.display = 'none';
 
-    // Display the artwork
+    // display artwork
     displayArtworkDetail(data.data);
 
   } catch (error) {
@@ -231,23 +211,20 @@ async function fetchArtworkDetail(artworkId) {
   }
 }
 
-// ==============================
-// BUILD THE DETAIL PAGE
-// ==============================
-
+//build detail page
 function displayArtworkDetail(artwork) {
   const artworkDetail = document.getElementById('artwork-detail');
 
-  // Build image or placeholder
+  //image or placeholder
   let imageHTML = '';
   if (artwork.image_id) {
     const imageUrl = `https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`;
     imageHTML = `<img src="${imageUrl}" alt="${artwork.title}" />`;
   } else {
-    imageHTML = `<div class="detail-no-image"><p>No image available for this artwork</p></div>`;
+    imageHTML = `<div class="detail-no-image"><p>No image available</p></div>`;
   }
 
-  // Build the full detail HTML
+  //full detail html
   artworkDetail.innerHTML = `
     ${imageHTML}
     <div class="detail-info">
@@ -260,15 +237,12 @@ function displayArtworkDetail(artwork) {
   `;
 }
 
-// ==============================
-// BACK BUTTON
-// ==============================
-
+//back button
 backBtn.addEventListener('click', function() {
   showSearchView();
 });
 
-// NAV TITLE CLICK — always goes back to search view
+//nav title
 navTitle.addEventListener('click', function() {
   showSearchView();
 });
