@@ -85,6 +85,8 @@ lastSearchTerm = searchTerm;
     const goodResults = data.data.filter(artwork => artwork._score > 10);
 
 if (goodResults.length === 0) {
+  const resultsCount = document.getElementById('results-count');
+  resultsCount.textContent = '';
   resultsGrid.innerHTML = `
     <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem;">
       <p style="font-size: 1.1rem; color: #999; margin-bottom: 0.5rem;">No results found for "${searchTerm}"</p>

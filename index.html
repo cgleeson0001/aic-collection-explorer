@@ -4,42 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AIC Collection Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
 
     <nav>
-  <h1 id="nav-title">AIC Collection Explorer</h1>
-  <span class="nav-subtitle">Art Institute of Chicago</span>
-</nav>
+      <h1 id="nav-title">AIC Collection Explorer</h1>
+      <span class="nav-subtitle">Art Institute of Chicago</span>
+    </nav>
 
     <main>
 
-      <!-- SEARCH VIEW: this is what users see first -->
-      
+      <!-- SEARCH VIEW -->
       <section id="search-view">
-  <div class="search-header">
-    <h2>Explore the Collection</h2>
-    <p>Search over 100,000 artworks from the Art Institute of Chicago</p>
-  </div>
-  <div id="search-bar">
 
+        <div class="search-header">
+          <h2>Explore the Collection</h2>
+          <p>Search over 100,000 artworks from the Art Institute of Chicago</p>
+        </div>
+
+        <div id="search-bar">
           <input type="text" id="search-input" placeholder="Search artworks, artists..." />
           <button id="search-btn">Search</button>
         </div>
 
         <p id="error-message" style="display: none;"></p>
-
-        <p id="loading" style="display: none;">Loading...</p>
-        <div id="results-grid"></div>
-
-        <div id="results-grid">
-
-
-      </section>
-        <p id="loading" style="display: none;">Loading...</p>
         <p id="results-count"></p>
+        <p id="loading" style="display: none;">Loading...</p>
         <div id="results-grid"></div>
+
       </section>
 
       <!-- DETAIL VIEW -->
@@ -49,8 +44,6 @@
         <p id="detail-error" style="display: none;"></p>
         <div id="artwork-detail"></div>
       </section>
-
-
 
     </main>
 
