@@ -1,6 +1,6 @@
 # AIC Collection Explorer
 
-This web app lets one search differnt art pieces from the Art Institute of Chicago's public collection.
+This web app lets one search different art pieces from the Art Institute of Chicago's public collection.
 
 ## Live Demo
 
